@@ -1,0 +1,235 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="http://rannn505.github.io/node-powershell/"
+
+    >node-powershell (v3.1.1)</a>
+</h1>
+<h4>Easily run PowerShell from your NodeJS app</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.node-powershell">module node-powershell</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.node-powershell.node-powershell">
+            function <span class="apidocSignatureSpan"></span>node-powershell
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.node-powershell.toString">
+            function <span class="apidocSignatureSpan">node-powershell.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.node-powershell.toString">module node-powershell.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.node-powershell.toString.toString">
+            function <span class="apidocSignatureSpan">node-powershell.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.node-powershell" id="apidoc.module.node-powershell">module node-powershell</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.node-powershell.node-powershell" id="apidoc.element.node-powershell.node-powershell">
+        function <span class="apidocSignatureSpan"></span>node-powershell
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function Shell() {
+  var _ref = arguments.length &#x3e; 0 &#x26;&#x26; arguments[0] !== undefined ? arguments[0] : {},
+      _ref$executionPolicy = _ref.executionPolicy,
+      executionPolicy = _ref$executionPolicy === undefined ? &#x27;Unrestricted&#x27; : _ref$executionPolicy,
+      _ref$inputEncoding = _ref.inputEncoding,
+      inputEncoding = _ref$inputEncoding === undefined ? &#x27;utf8&#x27; : _ref$inputEncoding,
+      _ref$outputEncoding = _ref.outputEncoding,
+      outputEncoding = _ref$outputEncoding === undefined ? &#x27;utf8&#x27; : _ref$outputEncoding,
+      _ref$debugMsg = _ref.debugMsg,
+      debugMsg = _ref$debugMsg === undefined ? true : _ref$debugMsg,
+      _ref$noProfile = _ref.noProfile,
+      noProfile = _ref$noProfile === undefined ? true : _ref$noProfile;
+
+  _classCallCheck(this, Shell);
+
+  // cmds bulk to run at the next invoke call
+  var _this = _possibleConstructorReturn(this, (Shell.__proto__ || Object.getPrototypeOf(Shell)).call(this));
+
+  _this._cmds = [];
+  // history of cmds
+  _this._history = [];
+  // global config for class
+  _this._cfg = {};
+  _this._cfg.debugMsg = debugMsg;
+
+  // arguments for PowerShell process
+  var _args = [&#x27;-NoLogo&#x27;, &#x27;-NoExit&#x27;, &#x27;-InputFormat&#x27;, &#x27;Text&#x27;, &#x27;-Command&#x27;, &#x27;-&#x27;];
+  if (noProfile) {
+    _args = [&#x27;-NoProfile&#x27;].concat(_toConsumableArray(_args));
+  }
+  if (IS_WIN) {
+    _args = [&#x27;-ExecutionPolicy&#x27;, executionPolicy].concat(_toConsumableArray(_args));
+  }
+
+  // the PowerShell process
+  _this._proc = spawn(&#x27;powershell&#x27; + (IS_WIN ? &#x27;.exe&#x27; : &#x27;&#x27;), _args, {
+    stdio: &#x27;pipe&#x27;
+  });
+  if (!_this._proc.pid) {
+    throw new Error(&#x27;Opss... &#x27; + MODULE_NAME + &#x27; was unable to start PowerShell.\nPlease make sure that PowerShell is installed
+properly on your system, and try again.&#x27;);
+  }
+  _this._proc.on(&#x27;error&#x27;, function (error) {
+    throw new Error(&#x27;Opss... &#x27; + MODULE_NAME + &#x27; was unable to start PowerShell.\nPlease make sure that PowerShell is installed
+properly on your system, and try again.&#x27;);
+  });
+  _this._proc.stdin.setEncoding(inputEncoding);
+  _this._proc.stdout.setEncoding(outputEncoding);
+  _this._proc.stderr.setEncoding(outputEncoding);
+
+  // output to print after invoke call
+  var _output = [];
+  var _type = &#x27;_resolve&#x27;;
+
+  _this._proc.stdout.on(&#x27;data&#x27;, function (data) {
+    if (data.indexOf(EOI) !== -1) {
+      _this.emit(_type, _output.join(&#x27;&#x27;));
+      _output = [];
+      _type = &#x27;_resolve&#x27;;
+    } else {
+      _this.emit(&#x27;output&#x27;, data);
+      _output.push(data);
+    }
+  });
+  _this._proc.stderr.on(&#x27;data&#x27;, function (error) {
+    _this.emit(&#x27;err&#x27;, error);
+    _output.push(error);
+    _type = &#x27;_reject&#x27;;
+  });
+
+  // public props
+  _this.history = _this._history;
+  _this.streams = {
+    stdin: _this._proc.stdin,
+    stdout: _this._proc.stdout,
+    stderr: _this._proc.stderr
+  };
+
+  _this.__print__(OK_MSG, &#x27;Process &#x27; + _this._proc.pid + &#x27; started\n&#x27;);
+  return _this;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.node-powershell.toString" id="apidoc.element.node-powershell.toString">
+        function <span class="apidocSignatureSpan">node-powershell.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.node-powershell.toString" id="apidoc.module.node-powershell.toString">module node-powershell.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.node-powershell.toString.toString" id="apidoc.element.node-powershell.toString.toString">
+        function <span class="apidocSignatureSpan">node-powershell.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
