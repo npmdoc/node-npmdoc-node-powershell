@@ -1,4 +1,7 @@
-# api documentation for  [node-powershell (v3.1.1)](http://rannn505.github.io/node-powershell/)  [![npm package](https://img.shields.io/npm/v/npmdoc-node-powershell.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-node-powershell) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-node-powershell.svg)](https://travis-ci.org/npmdoc/node-npmdoc-node-powershell)
+# npmdoc-node-powershell
+
+#### basic api documentation for  [node-powershell (v3.1.1)](http://rannn505.github.io/node-powershell/)  [![npm package](https://img.shields.io/npm/v/npmdoc-node-powershell.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-node-powershell) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-node-powershell.svg)](https://travis-ci.org/npmdoc/node-npmdoc-node-powershell)
+
 #### Easily run PowerShell from your NodeJS app
 
 [![NPM](https://nodei.co/npm/node-powershell.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/node-powershell)
@@ -108,7 +111,8 @@
         "test:coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
         "version": "npm run build && git add -A"
     },
-    "version": "3.1.1"
+    "version": "3.1.1",
+    "bin": {}
 }
 ```
 
